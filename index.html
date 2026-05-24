@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>게임 그만해라!</title>
+  <link rel="stylesheet" href="styles.css" />
+  
+  <!-- 버튼과 팝업창을 위한 스타일 추가 -->
+  <style>
+    /* 저작권 보기 버튼 스타일 */
+    .copyright-btn {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background-color: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      padding: 8px 16px;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 14px;
+      z-index: 10;
+      transition: background 0.3s;
+    }
+
+    .copyright-btn:hover {
+      background-color: rgba(255, 255, 255, 0.4);
+    }
+
+    /* 팝업창 배경 (기본 상태는 숨김) */
+    .modal {
+      display: none; 
+      position: fixed;
+      z-index: 100;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    /* 팝업창 본체 */
+    .modal-content {
+      background-color: #222;
+      color: #ddd;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #444;
+      width: 80%;
+      max-width: 600px;
+      border-radius: 8px;
+      position: relative;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+
+    /* 닫기 버튼 (X) */
+    .close-btn {
+      color: #aaa;
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close-btn:hover {
+      color: white;
+    }
+
+    /* 라이선스 텍스트 정렬 */
+    .license-text {
+      white-space: pre-wrap;
+      font-family: monospace;
+      font-size: 12px;
+      line-height: 1.5;
+      max-height: 300px;
+      overflow-y: auto;
+      text-align: left;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="scene">
+    <div class="creator-label">제작자: 조윤혁,김태인</div>
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+    <div id="particleLayer" class="particle-layer"></div>
+    <div id="target" class="main-text" data-text="게임을 그만해라!">게임을 그만해라!</div>
+    
+    <!-- 1. 저작권 보기 버튼 -->
+    <button id="copyrightBtn" class="copyright-btn">저작권 보기</button>
+
+    <!-- 2. 클릭하면 나타날 저작권 팝업창 -->
+    <div id="copyrightModal" class="modal">
+      <div class="modal-content">
+        <span id="closeBtn" class="close-btn">&times;</span>
+        <pre class="license-text">
+MIT License
+
+Copyright (c) 2026 taein
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</pre>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+
+  <!-- 3. 버튼 클릭 시 팝업을 켜고 끄는 기능 (JS) -->
+  <script>
+    const modal = document.getElementById("copyrightModal");
+    const btn = document.getElementById("copyrightBtn");
+    const closeBtn = document.getElementById("closeBtn");
+
+    // 버튼 누르면 팝업 보이기
+    btn.onclick = function() {
+      modal.style.display = "block";
+    }
+
+    // X 누르면 팝업 숨기기
+    closeBtn.onclick = function() {
+      modal.style.display = "none";
+    }
+
+    // 팝업 바깥쪽 어두운 화면 누르면 팝업 숨기기
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+  </script>
+</body>
+</html>

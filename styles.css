@@ -1,0 +1,274 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --glow-a: #ff5fd2;
+  --glow-b: #7c3aed;
+  --glow-c: #38bdf8;
+  --spark: #fde047;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Segoe UI", "Noto Sans KR", sans-serif;
+  color: #fff;
+  background:
+    radial-gradient(circle at top left, rgba(99, 102, 241, 0.6), transparent 20%),
+    radial-gradient(circle at bottom right, rgba(244, 114, 182, 0.55), transparent 18%),
+    linear-gradient(135deg, #030712, #111827 45%, #0f172a);
+  overflow: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+}
+
+.scene {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  isolation: isolate;
+  padding: 2rem 1rem 3rem;
+}
+
+.creator-label {
+  position: absolute;
+  top: 1.2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-align: center;
+  color: #fff;
+  text-shadow:
+    0 0 18px rgba(255, 95, 210, 0.95),
+    0 0 36px rgba(124, 58, 237, 0.8),
+    0 0 48px rgba(56, 189, 248, 0.55);
+}
+
+.ambient {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(18px);
+  opacity: 0.42;
+  animation: drift 12s ease-in-out infinite alternate;
+}
+
+.ambient-one {
+  width: 320px;
+  height: 320px;
+  top: 10%;
+  left: 8%;
+  background: rgba(244, 114, 182, 0.4);
+}
+
+.ambient-two {
+  width: 360px;
+  height: 360px;
+  bottom: 8%;
+  right: 10%;
+  background: rgba(56, 189, 248, 0.34);
+  animation-delay: 1s;
+}
+
+.particle-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,1), rgba(253,224,71,0.8) 55%, transparent 100%);
+  box-shadow: 0 0 16px rgba(253,224,71,0.9);
+  animation: particle-fall 1.6s linear forwards;
+}
+
+.main-text {
+  position: relative;
+  z-index: 1;
+  padding: 1.2rem 2.1rem;
+  border-radius: 40px;
+  font-size: clamp(3.8rem, 12vw, 7rem);
+  font-weight: 950;
+  line-height: 1;
+  text-transform: uppercase;
+  text-align: center;
+  letter-spacing: 0.08em;
+  color: transparent;
+  background:
+    linear-gradient(120deg, rgba(255,247,237,0.9) 0%, rgba(249,168,212,0.8) 20%, rgba(192,132,252,0.78) 42%, rgba(103,232,249,0.72) 70%, rgba(253,224,71,0.7) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 0 18px rgba(255, 95, 210, 0.2),
+    0 0 46px rgba(124, 58, 237, 0.18),
+    inset 0 0 18px rgba(255, 255, 255, 0.03);
+  text-shadow:
+    0 0 10px rgba(255, 95, 210, 0.4),
+    0 0 24px rgba(124, 58, 237, 0.35),
+    0 0 34px rgba(56, 189, 248, 0.3);
+  animation: glowPulse 1.6s ease-in-out infinite alternate, float 5s ease-in-out infinite;
+  user-select: none;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+}
+
+.main-text::before,
+.main-text::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  padding: inherit;
+  border-radius: inherit;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+.main-text::before {
+  color: rgba(255, 95, 210, 0.8);
+  transform: translate(-2px, -2px);
+  animation: glitchShift 2.5s infinite steps(1, end);
+}
+
+.main-text::after {
+  color: rgba(56, 189, 248, 0.8);
+  transform: translate(2px, 2px);
+  animation: glitchShift 2.9s infinite reverse steps(1, end);
+}
+
+.main-text.active {
+  animation:
+    burstPop 0.45s ease,
+    glowPulse 1.4s ease-in-out infinite alternate,
+    float 4.7s ease-in-out infinite;
+}
+
+.ring {
+  position: absolute;
+  inset: -10%;
+  border-radius: 999px;
+  border: 2px solid rgba(255,255,255,0.3);
+  transform: scale(0.8);
+  animation: ringExpand 0.75s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes glowPulse {
+  from {
+    text-shadow:
+      0 0 10px rgba(255, 95, 210, 0.3),
+      0 0 24px rgba(124, 58, 237, 0.28),
+      0 0 34px rgba(56, 189, 248, 0.26);
+    transform: scale(1);
+    filter: saturate(0.95);
+  }
+  to {
+    text-shadow:
+      0 0 18px rgba(255, 95, 210, 0.55),
+      0 0 42px rgba(124, 58, 237, 0.5),
+      0 0 58px rgba(56, 189, 248, 0.45);
+    transform: scale(1.01);
+    filter: saturate(1.05);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes burstPop {
+  0% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  40% {
+    transform: scale(1.12) rotate(-3deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes ringExpand {
+  from {
+    transform: scale(0.85);
+    opacity: 0.9;
+  }
+  to {
+    transform: scale(1.3);
+    opacity: 0;
+  }
+}
+
+@keyframes glitchShift {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  20% {
+    transform: translate(-2px, 1px);
+  }
+  40% {
+    transform: translate(2px, -1px);
+  }
+  60% {
+    transform: translate(-1px, 2px);
+  }
+  80% {
+    transform: translate(1px, -2px);
+  }
+}
+
+@keyframes drift {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(20px, -12px, 0) scale(1.08);
+  }
+}
+
+@keyframes particle-fall {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(var(--vx), var(--vy), 0) scale(0.2);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .main-text {
+    padding: 1rem 1.4rem;
+  }
+}
+
